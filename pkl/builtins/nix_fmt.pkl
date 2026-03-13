@@ -8,14 +8,10 @@ import "../Config.pkl"
 nix_fmt = new Config.Step {
   glob = "**/*.nix"
   check = new Config.Script {
-    linux = "nixfmt --check {{ files }}"
-    macos = "nixfmt --check {{ files }}"
     windows = ""
     other = "nixfmt --check {{ files }}"
   }
   fix = new Config.Script {
-    linux = "nixfmt {{ files }}"
-    macos = "nixfmt {{ files }}"
     windows = ""
     other = "nixfmt {{ files }}"
   }
