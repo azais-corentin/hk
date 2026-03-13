@@ -386,14 +386,16 @@ mod tests {
 
     #[test]
     fn test_has_command_for_empty_command() {
-        // Test that has_command_for returns false when command is empty after platform selection
+        // Mirror the nix_fmt.pkl pattern: windows is empty, other has the real command.
+        // On Windows the empty string should make has_command_for return false;
+        // on every other platform the `other` fallback provides a valid command.
         let step = Step {
             name: "test_step".to_string(),
             check: Some(Script {
-                linux: Some("linux_cmd".to_string()),
-                macos: Some("macos_cmd".to_string()),
+                linux: None,
+                macos: None,
                 windows: Some("".to_string()),
-                other: None,
+                other: Some("other_cmd".to_string()),
             }),
             fix: None,
             ..Default::default()
@@ -401,13 +403,11 @@ mod tests {
 
         #[cfg(target_os = "windows")]
         {
-            // On Windows with empty command, should return false
             assert!(!step.has_command_for(RunType::Check));
         }
 
         #[cfg(not(target_os = "windows"))]
         {
-            // On non-Windows platforms, should have a command
             assert!(step.has_command_for(RunType::Check));
         }
     }
