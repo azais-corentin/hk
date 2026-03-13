@@ -119,7 +119,10 @@ impl Step {
         } else {
             self.run_cmd(job.run_type)
         };
-        let Some(mut run) = run_cmd.map(|s| s.to_string()) else {
+        let Some(mut run) = run_cmd
+            .map(|s| s.to_string())
+            .filter(|s| !s.trim().is_empty())
+        else {
             eyre::bail!("{self}: no run command");
         };
         if let Some(prefix) = &self.prefix {
